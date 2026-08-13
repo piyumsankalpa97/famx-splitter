@@ -55,9 +55,9 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[#F7F9FC]">
+    <div className="h-full flex flex-col bg-[#F7F9FC]">
       {/* Image Section */}
-      <div className="relative w-full md:w-1/2 lg:w-[55%] h-64 md:h-screen">
+      <div className="relative w-full md:h-[40vh] min-h-[250px]">
         <Image 
           src={coverImage} 
           alt="Trip Cover" 
@@ -68,7 +68,7 @@ export default function LandingPage() {
       </div>
 
       {/* Form Section */}
-      <div className="flex-1 flex flex-col justify-start px-6 py-12 sm:px-12 lg:px-20 xl:px-24 bg-[#F7F9FC] md:bg-white md:shadow-[-20px_0_40px_rgba(0,0,0,0.05)] z-10 rounded-t-3xl md:rounded-none -mt-6 md:mt-0 relative">
+      <div className="flex-1 flex flex-col justify-start px-6 py-12 bg-[#F7F9FC] z-10 rounded-t-3xl -mt-6 relative">
         <div className="w-full max-w-md mx-auto">
           {/* Header */}
           <div className="mb-10">
@@ -91,7 +91,7 @@ export default function LandingPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="w-full px-5 py-4 bg-white md:bg-[#F7F9FC] border border-gray-200 rounded-xl text-[#1B2A4A] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6B5E] focus:border-transparent transition-all font-inter shadow-sm md:shadow-none"
+                className="w-full px-5 py-4 bg-white border border-gray-200 rounded-xl text-[#1B2A4A] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6B5E] focus:border-transparent transition-all font-inter shadow-sm"
                 required
               />
             </div>

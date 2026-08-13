@@ -77,7 +77,7 @@ export default function Dashboard() {
     <div className="p-6 pt-8 pb-32">
       <div className="mb-8">
         <h1 className="font-fredoka text-3xl font-semibold mb-2 text-[#1B2A4A]">Dashboard</h1>
-        <p className="font-inter text-gray-500 text-sm">Your family's trip balance and overview of everyone else.</p>
+        <p className="font-inter text-gray-500 text-sm">Your family&apos;s trip balance and overview of everyone else.</p>
       </div>
 
       {userFamily && (
