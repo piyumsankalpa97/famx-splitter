@@ -4,6 +4,7 @@ import "./globals.css";
 import { IdentityHeader } from "@/components/IdentityHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { PullToRefresh } from "@/components/PullToRefresh";
 import { Suspense } from "react";
 
 const fredoka = Fredoka({
@@ -61,9 +62,9 @@ export default function RootLayout({
             <IdentityHeader />
           </Suspense>
           
-          <main className="flex-1 overflow-y-auto h-full scroll-smooth relative z-0">
+          <PullToRefresh>
             {children}
-          </main>
+          </PullToRefresh>
 
           <Suspense fallback={null}>
             <BottomNav />

@@ -184,7 +184,17 @@ export default function AddExpense() {
 
       await supabase.from("expense_splits").insert(splitsToInsert);
       
+      // Reset form state so it's clean if the user navigates back to this page
+      setTitle("");
+      setAmount("");
+      setNote("");
+      setSplitToAll(true);
+      setCustomSplits({});
+      setSelectedSplitIds(new Set());
+      setSubmitting(false);
+      
       router.push("/expenses");
+      router.refresh();
     } catch (err) {
       console.error(err);
       alert("Failed to add expense");
