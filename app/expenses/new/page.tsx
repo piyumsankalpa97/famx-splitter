@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { Family, Person } from "@/lib/types";
-import { Loader2 } from "lucide-react";
+import { Loader2, Image as ImageIcon, X } from "lucide-react";
 
 export default function AddExpense() {
   const router = useRouter();
@@ -24,6 +24,16 @@ export default function AddExpense() {
   type CustomSplitType = 'lkr' | 'percent';
   const [customSplits, setCustomSplits] = useState<Record<string, { type: CustomSplitType, value: string }>>({});
   const [errorMsg, setErrorMsg] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
   
   useEffect(() => {
     const activeId = localStorage.getItem("active_person_id");
@@ -130,6 +140,31 @@ export default function AddExpense() {
     setSubmitting(true);
 
     try {
+      let imageUrl = null;
+      if (image) {
+        const ext = image.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+        // Uploading into a 'public' folder as required by your RLS policy
+        const filePath = `public/${fileName}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('anu-pol-trip')
+          .upload(filePath, image);
+          
+        if (uploadError) {
+          console.error("Upload error", uploadError);
+          setErrorMsg("Failed to upload image. Please try again.");
+          setSubmitting(false);
+          return;
+        }
+        
+        const { data: publicUrlData } = supabase.storage
+          .from('anu-pol-trip')
+          .getPublicUrl(filePath);
+          
+        imageUrl = publicUrlData.publicUrl;
+      }
+
       // Create Expense
       const { data: expData, error: expErr } = await supabase.from("expenses").insert({
         title,
@@ -137,7 +172,8 @@ export default function AddExpense() {
         paid_by: paidBy,
         created_by: activePersonId,
         occurred_at: new Date().toISOString(),
-        note: note || null
+        note: note || null,
+        image_url: imageUrl
       }).select().single();
 
       if (expErr || !expData) throw expErr;
@@ -188,6 +224,8 @@ export default function AddExpense() {
       setTitle("");
       setAmount("");
       setNote("");
+      setImage(null);
+      setImagePreview(null);
       setSplitToAll(true);
       setCustomSplits({});
       setSelectedSplitIds(new Set());
@@ -266,6 +304,31 @@ export default function AddExpense() {
               onChange={e => setNote(e.target.value)}
               className="w-full font-inter text-[#1B2A4A] bg-transparent border-b border-gray-200 pb-2 focus:border-[#FF6B5E] focus:outline-none transition-colors"
             />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Receipt / Image (Optional)</label>
+            {!imagePreview ? (
+              <label className="flex items-center justify-center w-full p-4 border-2 border-dashed border-gray-200 rounded-xl hover:bg-gray-50 hover:border-[#FF6B5E] cursor-pointer transition-colors">
+                <div className="flex flex-col items-center text-gray-400">
+                  <ImageIcon size={24} className="mb-2" />
+                  <span className="text-sm font-medium">Click to upload image</span>
+                </div>
+                <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+              </label>
+            ) : (
+              <div className="relative rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={imagePreview} alt="Preview" className="w-full max-h-[200px] object-cover" />
+                <button
+                  type="button"
+                  onClick={() => { setImage(null); setImagePreview(null); }}
+                  className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-black/70 text-white rounded-full backdrop-blur-sm transition-colors"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

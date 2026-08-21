@@ -5,6 +5,8 @@ import { supabase } from "@/lib/supabaseClient";
 import { Expense, ExpenseSplit, Person } from "@/lib/types";
 import { Loader2, ArrowLeft, Receipt } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 
 function ExpenseDetailContent({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -99,6 +101,19 @@ function ExpenseDetailContent({ params }: { params: Promise<{ id: string }> }) {
               <div className="flex flex-col gap-1 pt-1">
                 <span className="text-gray-500">Note</span>
                 <span className="text-gray-700 italic bg-gray-50 p-3 rounded-lg border border-gray-100 mt-1">{expense.note}</span>
+              </div>
+            )}
+            {expense.image_url && (
+              <div className="flex flex-col gap-2 pt-3 border-t border-gray-50 mt-1">
+                <span className="text-gray-500">Receipt / Image</span>
+                <div className="rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
+                  <PhotoProvider>
+                    <PhotoView src={expense.image_url}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={expense.image_url} alt="Receipt" className="w-full max-h-[200px] object-cover cursor-pointer" />
+                    </PhotoView>
+                  </PhotoProvider>
+                </div>
               </div>
             )}
           </div>

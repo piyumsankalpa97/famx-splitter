@@ -18,6 +18,7 @@ export type Expense = {
   created_by: string;
   occurred_at: string;
   note: string | null;
+  image_url?: string | null;
   created_at: string;
 };
 
