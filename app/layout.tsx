@@ -3,6 +3,7 @@ import { Fredoka, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { IdentityHeader } from "@/components/IdentityHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { Suspense } from "react";
 
 const fredoka = Fredoka({
@@ -23,8 +24,17 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
-  title: "Anu Pol Trip",
+  title: "FamX Splitter",
   description: "Private expense splitter for the Anu Pol trip.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    title: "FamX",
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    apple: "/icons/icon-192.png",
+  },
 };
 
 export const viewport: Viewport = {
@@ -32,6 +42,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: "#FF6B5E",
 };
 
 export default function RootLayout({
@@ -44,6 +55,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${fredoka.variable} ${plexMono.variable} antialiased bg-[#e2e8f0] text-[#1B2A4A] h-[100dvh] overflow-hidden flex justify-center`}
       >
+        <ServiceWorkerRegistration />
         <div className="w-full max-w-[430px] bg-[#F7F9FC] h-[100dvh] relative shadow-2xl flex flex-col overflow-hidden">
           <Suspense fallback={null}>
             <IdentityHeader />
