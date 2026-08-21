@@ -28,8 +28,8 @@ export function IdentityHeader() {
   if (pathname === "/") return null;
 
   return (
-    <header className="px-6 py-4 flex justify-between items-center bg-[#F7F9FC]/80 backdrop-blur-md z-40 sticky top-0 border-b border-gray-100 shadow-sm">
-      <h1 className="font-fredoka text-xl font-semibold text-[#1B2A4A]">Anu Pol Trip</h1>
+    <header className="px-6 py-4 flex justify-between items-center bg-[#FF6B5E] z-40 sticky top-0 shadow-sm">
+      <h1 className="font-fredoka text-xl font-semibold text-white">Anu Pol Trip</h1>
       <Link 
         href="/" 
         onClick={() => {
